@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NafAi Usage Instructions</title>
+  <style>
+    :root {
+      --bg: #f3e7e7bd;
+      --bg-secondary: #fff;
+      --card-bg: #f4f4f4;
+      --text: #111;
+      --primary: hsl(349, 100%, 35%);
+      --accent: #d32f2f;
+      --border: #ccc;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #000;
+      --bg-secondary: #121212;
+      --card-bg: #1e1e1e;
+      --text: #eee;
+      --primary: #ff1744;
+      --accent: #ff5252;
+      --border: #333;
+      --shadow: rgba(255, 0, 0, 0.4);
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 30px;
+      font-family: Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .instructions {
+      background-color: var(--bg-secondary);
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 5px 15px var(--shadow);
+      max-width: 800px;
+      margin: 50px auto 0 auto;
+      transition: all 0.3s ease;
+    }
+
+    .instructions:hover {
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .instructions h2 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .instructions ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .instructions li {
+      background-color: var(--card-bg);
+      margin-bottom: 12px;
+      padding: 15px;
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      color: var(--text);
+      transition: all 0.3s;
+    }
+
+    .instructions li:hover {
+      transform: translateX(5px);
+      background-color: var(--bg-secondary);
+      box-shadow: 0 4px 10px var(--shadow);
+    }
+
+    .instructions li span {
+      color: var(--accent);
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    /* Toggle Switch Styling */
+    .toggle-container {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 10;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 55px;
+      height: 28px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--primary);
+      border-radius: 34px;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(27px);
+    }
+
+    .slider:hover {
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    /* Return Home Button */
+    .back-button {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: var(--accent);
+    }
+    @media (max-width: 600px) {
+  .instructions {
+    padding: 15px;
+    margin: 30px 10px;
+  }
+
+  .instructions h2 {
+    font-size: 1.4rem;
+  }
+
+  .instructions li {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+
+  .toggle-container {
+    top: 10px;
+    right: 10px;
+  }
+
+  .back-button {
+    top: 10px;
+    left: 10px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .toggle-switch {
+    width: 50px;
+    height: 24px;
+  }
+
+  .slider:before {
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+}
+
+  </style>
+</head>
+<body>
+    
+  <!-- Back to Home Button -->
+  <a class="back-button" href="index.html">← Home</a>
+
+  <!-- Toggle Switch -->
+  <div class="toggle-container">
+    <label class="toggle-switch">
+      <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="instructions">
+    <h2>How to Use NAFAI Effectively</h2>
+    <ul>
+      <li><span>Global Search:</span> Type normally, but it might take a little time. <strong>Do not use a dot (.)</strong>.</li>
+      <li><span>Generative AI:</span> Start your query with a <strong>dot (.)</strong> to get smart answers.</li>
+      <li><span>Latest News:</span> Use the keyword <strong>news</strong>.</li>
+      <li><span>Math:</span> Use keywords like <strong>solve</strong>, <strong>calculate</strong>, or <strong>compute</strong>.</li>
+      <li><span>Weather:</span> Use the keyword <strong>weather</strong>.</li>
+      <li><span>Dictionary:</span> Use <strong>define</strong> or <strong>meaning of</strong>. (⚠️ This feature is still under development.)</li>
+    </ul>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme");
+      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    }
+  </script>
+
+</body>
+</html>
