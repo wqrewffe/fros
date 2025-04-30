@@ -477,14 +477,18 @@
     
     </style>
 </head>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
 <body>
+    
     <div class="container">
         <button class="history-button" id="historyButton" title="View history">
             <i class="fas fa-history"></i>
         </button>
         
         <div class="theme-toggle" id="themeToggle"></div>
-        
+        <p>🟢 <span id="active-users">0</span> users active now</p>
+
         <div class="header">
             <h1 class="title">NAFAI</h1>
             <p class="subtitle">Your intelligent assistant</p>
@@ -512,6 +516,7 @@
         <div id="historyContent"></div>
         <button class="clear-history" id="clearHistory">Clear History</button>
     </div>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
     <script>
         // DOM Elements
@@ -705,5 +710,12 @@ const res = await fetch('https://back-6-hfvi.onrender.com/ask', {  // Add /ask
             loadHistory();
         });
     </script>
+    <script>
+        const socket = io();
+      
+        socket.on('active_users', function(count) {
+          document.getElementById('active-users').textContent = count;
+        });
+      </script>
 </body>
 </html>
