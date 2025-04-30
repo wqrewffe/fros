@@ -479,7 +479,7 @@
     
     </style>
 </head>
-<!-- <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script> -->
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 <body>
     
@@ -489,7 +489,7 @@
         </button>
         
         <div class="theme-toggle" id="themeToggle"></div>
-        <p>🟢 <span id="active-users"> </span></p>
+        <p>🟢 <span id="active-users">0</span> users active now</p>
 
         <div class="header">
             <h1 class="title">NAFAI</h1>
@@ -519,7 +519,7 @@
         <button class="clear-history" id="clearHistory">Clear History</button>
     </div>
 
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js">
+    <script>
         // DOM Elements
         const queryInput = document.getElementById('query');
         const responseDiv = document.getElementById('response');
@@ -532,11 +532,7 @@
         const overlay = document.getElementById('overlay');
         const clearHistoryBtn = document.getElementById('clearHistory');
         const searchForm = document.getElementById('searchForm');
-        const socket = io();
-      
-      socket.on('active_users', function(count) {
-        document.getElementById('active-users').textContent = count;
-      });
+        
         // Theme toggle
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -714,7 +710,11 @@ const res = await fetch('https://back-6-hfvi.onrender.com/ask', {  // Add /ask
             queryInput.focus();
             loadHistory();
         });
-       
+        const socket = io();
+      
+        socket.on('active_users', function(count) {
+          document.getElementById('active-users').textContent = count;
+        });
     </script>
 </body>
 </html>
