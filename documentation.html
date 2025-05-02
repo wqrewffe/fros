@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NafAi Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="naf__1_-removebg-preview.png" type="image/png">
+    <style>
+        :root {
+            --bg: #0a0c17;
+            --bg-secondary: #11172b;
+            --card-bg: #151f3a;
+            --text: #ffffff;
+            --text-secondary: #ffffff;
+            --primary: #ff2a4d;
+            --accent: #3a7dff;
+            --border: #25345a;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg: #f9fafb;
+            --bg-secondary: hsl(0, 13%, 95%);
+            --card-bg: #ffffff;
+            --text: #0a0c17;
+            --text-secondary: #0a0c17cc;
+            --border: #d0d9f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: clamp(1rem, 3vw, 2rem);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .feature-list li:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 2vw, 1.5rem);
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 42, 77, 0.3);
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .container {
+                padding: 0.5rem;
+            }
+
+            .section {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .feature-list li {
+                margin-bottom: 0.8rem;
+            }
+        }
+
+        /* Tablet adjustments */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Landscape mode adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .header {
+                margin-bottom: 1rem;
+            }
+
+            .section {
+                margin-bottom: 1rem;
+            }
+
+            .feature-list li {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Header Styles */
+        .main-header {
+            background: var(--bg-secondary);
+            padding: 0.8rem 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px var(--shadow);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: fit-content;
+        }
+
+        .header-logo {
+            width: 32px;
+            height: 32px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-button i {
+            font-size: 1rem;
+        }
+
+        .nav-button span {
+            display: none;
+        }
+
+        .nav-button:hover {
+            background: var(--card-bg);
+            color: var(--primary);
+        }
+
+        /* Footer Styles */
+        .main-footer {
+            background: var(--bg-secondary);
+            padding: 3rem 2rem 1rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Adjust container for header */
+        .container {
+            margin-top: 60px;
+            padding-top: 1rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0.6rem 0.8rem;
+            }
+
+            .header-content {
+                gap: 0.5rem;
+            }
+
+            .logo-container h1 {
+                font-size: 1.4rem;
+            }
+
+            .nav-button {
+                padding: 0.4rem;
+            }
+
+            .nav-button i {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 0.5rem;
+            }
+
+            .header-logo {
+                width: 28px;
+                height: 28px;
+            }
+
+            .logo-container h1 {
+                font-size: 1.2rem;
+            }
+
+            .nav-button {
+                padding: 0.3rem;
+            }
+
+            .nav-button i {
+                font-size: 1rem;
+            }
+        }
+
+        /* Show button text on larger screens */
+        @media (min-width: 769px) {
+            .nav-button span {
+                display: inline;
+            }
+
+            .nav-button {
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Add ray effect on text hover */
+        a, button, .nav-button, .submit-button, .back-button, h1, h2, h3, h4, p, span, label {
+            position: relative;
+            text-decoration: none;
+        }
+
+        a:hover::after, button:hover::after, .nav-button:hover::after, 
+        .submit-button:hover::after, .back-button:hover::after, 
+        h1:hover::after, h2:hover::after, h3:hover::after, 
+        h4:hover::after, p:hover::after, span:hover::after, 
+        label:hover::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            animation: rayEffect 0.5s ease forwards;
+        }
+
+        @keyframes rayEffect {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+        }
+
+        /* Exclude certain elements from the ray effect */
+        .submit-button:hover::after,
+        .back-button:hover::after,
+        .nav-button:hover::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                    <img src="naf__1_-removebg-preview.png" alt="NafAi Logo" class="header-logo">
+                    <h1 style="font-size: 1.8rem; color: var(--primary); margin-left: 10px;">NAFAI</h1>
+                </a>
+            </div>
+            <nav class="header-nav">
+                <button class="nav-button" id="historyButton">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </button>
+                <button class="nav-button" id="settingsButton">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="header">
+            <h1>NafAi Documentation</h1>
+            <p>Comprehensive guide to using NafAi effectively</p>
+        </div>
+
+        <div class="section">
+            <h2>Getting Started</h2>
+            <p>Welcome to NafAi! This documentation will help you understand how to use our AI assistant effectively.</p>
+            
+            <h3>Quick Start Guide</h3>
+            <ul>
+                <li>Type your question in the search bar</li>
+                <li>Press Enter or click the Ask button</li>
+                <li>Wait for the AI to process your request</li>
+                <li>View the response in the chat window</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Features</h2>
+            
+            <h3>Global Search</h3>
+            <p>NafAi can search and provide information on a wide range of topics. Simply type your question naturally.</p>
+
+            <h3>Latest News</h3>
+            <p>Use the keyword "news" followed by your topic of interest to get the latest updates.</p>
+
+            <h3>Mathematical Calculations</h3>
+            <p>Use keywords like "solve", "calculate", or "compute" followed by your mathematical expression.</p>
+
+            <h3>Weather Information</h3>
+            <p>Type "weather" followed by a location to get current weather conditions.</p>
+        </div>
+
+        <div class="section">
+            <h2>Tips & Tricks</h2>
+            <ul>
+                <li>Be specific in your questions for better results</li>
+                <li>Use natural language - no need for special commands</li>
+                <li>Check the history panel for previous conversations</li>
+                <li>Use the settings panel to customize your experience</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Customization</h2>
+            <p>NafAi offers several customization options:</p>
+            <ul>
+                <li>Dark/Light mode toggle</li>
+                <li>Font size adjustment</li>
+                <li>Response speed control</li>
+                <li>Animation preferences</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About NafAi</h3>
+                <p>Your intelligent assistant powered by advanced AI technology.</p>
+                <p>Created by Nafis Abdullah</p>
+                <p>Dhaka, Bangladesh</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="documentation.html"><i class="fas fa-book"></i> Documentation</a></li>
+                    <li><a href="help-center.html"><i class="fas fa-question-circle"></i> Help Center</a></li>
+                    <li><a href="report-issues.html"><i class="fas fa-bug"></i> Report Issues</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="mailto:nafisabdullah424@gmail.com"><i class="fas fa-envelope"></i> nafisabdullah424@gmail.com</a></li>
+                    <li><a href="https://github.com/always424" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 NafAi. All rights reserved. | Made with ❤️ in Bangladesh</p>
+        </div>
+    </footer>
+</body>
+</html> 
