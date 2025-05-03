@@ -359,6 +359,33 @@
             text-decoration: none;
         }
 
+        /* Custom Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Firefox Scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg);
+        }
+
         a:hover::after, button:hover::after, .nav-button:hover::after, 
         .submit-button:hover::after, .back-button:hover::after, 
         h1:hover::after, h2:hover::after, h3:hover::after, 
