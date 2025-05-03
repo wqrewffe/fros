@@ -238,6 +238,7 @@
         #response-container {
             flex: 1;
             min-height: 300px;
+            max-height: 70vh;
             position: relative;
             border-radius: 16px;
             overflow: hidden;
@@ -248,17 +249,30 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 30px; /* Add space at bottom */
+            padding: 20px; /* Add padding around content */
         }
 
         #response {
-            padding: 30px;
+    padding: 30px;
             height: 100%;
             overflow-y: auto;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            white-space: pre-wrap;
-            font-family: inherit;
-            letter-spacing: 0.2px;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    white-space: pre-wrap;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    scroll-behavior: smooth;
+    max-height: 450px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+    margin-bottom: 20px;
+    transition: max-height 0.3s ease; /* Optional for smooth height change */
+}
+
+        
+        #response::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
 
         #response .response-section {
@@ -267,6 +281,11 @@
             background: var(--card-bg);
             border-radius: 12px;
             border: 1px solid var(--border);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            max-height: 400px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
         }
 
         #response .response-section h3 {
@@ -887,7 +906,7 @@
         }
 
         #response li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         #response code {
@@ -2167,6 +2186,41 @@
                 opacity: 0;
             }
         }
+
+        /* History Panel Mobile Fixes */
+        @media (max-width: 768px) {
+            .history-panel {
+                width: 85%;
+                right: -85%;
+                max-width: 350px;
+            }
+
+            .history-panel.show {
+                right: 0;
+            }
+        }
+
+        /* Auto-scroll styles */
+
+        .auto-scroll {
+            animation: scrollToBottom 1s ease-out;
+        }
+
+        @keyframes scrollToBottom {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        /* #response {
+    max-height: 400px;
+    overflow-y: auto;
+} */
+
     </style>
      <script>
         // Add this to your existing JavaScript
@@ -2207,7 +2261,6 @@
         });
     </script> 
 </head>
-<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
 <body>
     <!-- Header -->
@@ -2298,16 +2351,6 @@
                 </div>
             </div>
             <div class="settings-section">
-                <!-- <h4>System Status</h4>
-                <div class="active-users-section">
-                    <div class="active-users-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="active-users-info">
-                        <div class="active-users-count" id="settingsActiveUsers">0</div>
-                        <div class="active-users-label">Active Users</div>
-                    </div>
-                    <div class="active-users-pulse"></div> -->
                 </div>
             </div>
         </div>
@@ -2345,7 +2388,7 @@
         <div id="historyContent"></div>
         <button class="clear-history" id="clearHistory">Clear History</button>
     </div>
-
+    
     <!-- Footer -->
     <footer class="main-footer">
         <div class="footer-content">
@@ -2437,6 +2480,22 @@ document.addEventListener('contextmenu', function(event) {
                 askQuery();
             }
         });
+        function expandResponseContainer() {
+            const responseEl = document.getElementById('response');
+            if (responseEl) {
+                // Get the actual content height
+                const contentHeight = responseEl.scrollHeight;
+                
+                // Set max-height to match content height
+                responseEl.style.maxHeight = contentHeight + 'px';
+                
+                // Optional: remove scroll after expansion
+                setTimeout(() => {
+                    responseEl.style.overflowY = 'visible';
+                }, 300); // Wait for transition to complete
+            }
+        }
+
         
         // Ask button click event
         askButton.addEventListener('click', askQuery);
@@ -2488,24 +2547,129 @@ document.addEventListener('contextmenu', function(event) {
         }
         
         // Modify the animateResponse function to handle formatted content
+        let isAutoScrolling = true; // Track if auto-scrolling is enabled
+        // const responseDiv = document.getElementById('response'); // Declare once at the top
+
         function animateResponse(text, element) {
             const words = text.split(/(<[^>]+>|[^<>\s]+)/);
             let currentIndex = 0;
             const chunkSize = 3;
-            
+
+            element.innerHTML = ''; // Clear previous content if needed
+
             function addNextChunk() {
                 if (currentIndex < words.length) {
                     const chunk = words.slice(currentIndex, currentIndex + chunkSize).join('');
-                    // Format any URLs in the new chunk before adding it
                     const formattedChunk = formatResponse(chunk);
-                    element.innerHTML += (currentIndex === 0 ? '' : '') + formattedChunk;
+                    element.innerHTML += formattedChunk;
                     currentIndex += chunkSize;
+
+                    // Only scroll if auto-scrolling is enabled
+                    if (isAutoScrolling) {
+                        setTimeout(scrollToBottom, 50);
+                    }
+
                     setTimeout(addNextChunk, getResponseSpeed());
+                } else {
+                    // After all chunks are added, expand the container
+                    expandResponseContainer();
                 }
             }
-            
-            element.innerHTML = '';
+
             addNextChunk();
+        }
+
+        // Add scroll event listener to detect manual scrolling
+        if (responseDiv) {
+            let lastScrollTop = 0;
+            
+            responseDiv.addEventListener('scroll', () => {
+                const currentScrollTop = responseDiv.scrollTop;
+                
+                // If user scrolls up, disable auto-scrolling
+                if (currentScrollTop < lastScrollTop) {
+                    isAutoScrolling = false;
+                }
+                
+                // If user scrolls to bottom, re-enable auto-scrolling
+                if (currentScrollTop + responseDiv.clientHeight >= responseDiv.scrollHeight - 10) {
+                    isAutoScrolling = true;
+                }
+                
+                lastScrollTop = currentScrollTop;
+            });
+        }
+
+        // Reset auto-scrolling when starting a new query
+        async function askQuery() {
+            isAutoScrolling = true; // Reset auto-scrolling state
+            const query = queryInput.value.trim();
+            
+            if (!query) {
+                responseDiv.innerHTML = `<p class="error">Please enter a question</p>`;
+                responseDiv.classList.add('show');
+                return;
+            }
+            
+            askButton.disabled = true;
+            askButton.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><span>Processing</span>';
+            
+            showTypingIndicator();
+            
+            // Force initial scroll
+            if (responseDiv) {
+                responseDiv.scrollTop = responseDiv.scrollHeight;
+            }
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+                const res = await fetch('https://back-6-hfvi.onrender.com/ask', {
+    method: 'POST',
+    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (!res.ok) {
+                    throw new Error(`Server error: ${res.status}`);
+                }
+                
+                const data = await res.json();
+                
+                if (data.error) {
+                    responseDiv.innerHTML = `<p class="error">Error: ${data.error}</p>`;
+                } else {
+                    responseDiv.innerHTML = '<p></p>';
+                    requestAnimationFrame(() => {
+                        animateResponse(data.response, responseDiv.querySelector('p'));
+                    });
+                    addToLocalHistory(query, data.response);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                let errorMessage = 'Connection error. Please try again.';
+                
+                if (error.name === 'AbortError') {
+                    errorMessage = 'Request is taking too long. Please try again.';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Cannot connect to server. Please check your internet connection.';
+                } else if (error.message.includes('Server error')) {
+                    errorMessage = 'Server is busy. Please try again in a few moments.';
+                }
+                
+                responseDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+            } finally {
+                responseDiv.classList.add('show');
+                askButton.disabled = false;
+                askButton.innerHTML = '<i class="fas fa-search"></i><span>Ask</span>';
+                queryInput.focus();
+            }
         }
         
         // Welcome Popup
@@ -2525,6 +2689,7 @@ document.addEventListener('contextmenu', function(event) {
         });
 
         // Settings Panel
+        
         const settingsButton = document.getElementById('settingsButton');
         const settingsPanel = document.getElementById('settingsPanel');
         const closeSettings = document.getElementById('closeSettings');
@@ -2553,64 +2718,10 @@ document.addEventListener('contextmenu', function(event) {
         function getResponseSpeed() {
             const speed = responseSpeedSelect.value;
             switch(speed) {
-                case 'fast': return 1;    // Reduced from 50
-                case 'medium': return 50;  // Reduced from 100
-                case 'slow': return 100;   // Reduced from 200
-                default: return 50;
-            }
-        }
-
-        // Optimize the askQuery function
-        async function askQuery() {
-            const query = queryInput.value.trim();
-            
-            if (!query) {
-                responseDiv.innerHTML = `<p class="error">Please enter a question</p>`;
-                responseDiv.classList.add('show');
-                return;
-            }
-            
-            askButton.disabled = true;
-            askButton.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><span>Processing</span>';
-            
-            showTypingIndicator();
-            
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-                const res = await fetch('https://back-6-hfvi.onrender.com/ask', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-                    body: JSON.stringify({ 
-                        query,
-                    }),
-                    signal: controller.signal
-});
-                
-                clearTimeout(timeoutId);
-                const data = await res.json();
-                
-                if (data.error) {
-                    responseDiv.innerHTML = `<p class="error">Error: ${data.error}</p>`;
-                } else {
-                    responseDiv.innerHTML = '<p></p>';
-                    // Start animation immediately after receiving response
-                    requestAnimationFrame(() => {
-                        animateResponse(data.response, responseDiv.querySelector('p'));
-                    });
-                    addToLocalHistory(query, data.response);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                responseDiv.innerHTML = `<p class="error">Connection error. Please try again.</p>`;
-            } finally {
-                responseDiv.classList.add('show');
-                askButton.disabled = false;
-                askButton.innerHTML = '<i class="fas fa-search"></i><span>Ask</span>';
-                queryInput.focus();
+                case 'fast': return 1;     // Faster response
+                case 'medium': return 15;  // Medium speed
+                case 'slow': return 25;    // Slower speed
+                default: return 15;
             }
         }
 
@@ -2657,8 +2768,8 @@ document.addEventListener('contextmenu', function(event) {
                 historyItem.addEventListener('click', (e) => {
                     // Don't trigger if clicking the delete button
                     if (!e.target.closest('.delete-history')) {
-                        loadHistoryItem(item);
-                        closeHistoryPanel();
+                    loadHistoryItem(item);
+                    closeHistoryPanel();
                     }
                 });
 
@@ -2679,6 +2790,11 @@ document.addEventListener('contextmenu', function(event) {
             queryInput.value = item.query;
             responseDiv.innerHTML = `<p>${formatResponse(item.response)}</p>`;
             responseDiv.classList.add('show');
+            
+            // Expand container after loading from history
+            setTimeout(() => {
+                expandResponseContainer();
+            }, 100); // Small delay to ensure content is rendered
         }
 
         function clearLocalHistory() {
@@ -2722,13 +2838,7 @@ document.addEventListener('contextmenu', function(event) {
             queryInput.focus();
             loadHistory();
         });
-        const socket = io();
-      
-        socket.on('active_users', function(count) {
-          document.getElementById('active-users').textContent = count;
-          document.getElementById('settingsActiveUsers').textContent = count;
-        });
-
+        
         // Update response speed options
         responseSpeedSelect.innerHTML = `
             <option value="fast">Very Fast</option>
@@ -2761,8 +2871,8 @@ document.addEventListener('contextmenu', function(event) {
             const speed = animationSpeedSelect.value;
             const speeds = {
                 fast: '0.3s',
-                normal: '0.4s',
-                slow: '0.6s'
+                normal: '0.5s',
+                slow: '0.7s'
             };
             document.documentElement.style.setProperty('--transition-speed', speeds[speed]);
             localStorage.setItem('animationSpeed', speed);
@@ -2814,6 +2924,24 @@ document.addEventListener('contextmenu', function(event) {
             queryInput.focus();
             loadHistory();
         });
+
+        // Update the scrollToBottom function
+        function scrollToBottom() {
+            const responseDiv = document.getElementById('response');
+            if (responseDiv) {
+                // Add a small delay to ensure content is rendered
+                requestAnimationFrame(() => {
+                    responseDiv.scrollTo({
+                        top: responseDiv.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        }
+
+
+
+
     </script>
 </body>
 </html>
