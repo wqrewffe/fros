@@ -106,6 +106,7 @@
             display: flex;
             flex-direction: column;
             transition: background-color 0.3s ease;
+            font-size: 1.2rem; /* Increased base font size */
         }
 
         .container {
@@ -148,7 +149,7 @@
         }
 
         .title {
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: clamp(2.5rem, 5vw, 3.5rem); /* Increased title size */
             font-weight: 800;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -161,7 +162,7 @@
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-size: clamp(1.1rem, 3vw, 1.3rem); /* Increased subtitle size */
             font-weight: 400;
             max-width: 600px;
             margin: 0 auto;
@@ -171,29 +172,57 @@
 
         .search-container {
             display: flex;
-            gap: 15px;
+            gap: 17px;
             margin-bottom: 30px;
             width: 100%;
             position: relative;
             transform: translateY(20px);
             opacity: 0;
             animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .search-input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            min-height: 60px;
+            position: relative;
+        }
+
+        .search-input-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--border);
+        }
+
+        .search-input-group:focus-within {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--border);
+            transform: translateY(-1px);
         }
 
         #query {
-            flex: 1;
-            padding: 18px 25px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            background-color: var(--bg-secondary);
+            width: 100%;
+            padding: 12px 70px 12px 16px; /* Increased right padding for larger button */
+            border: none;
+            background: transparent;
             color: var(--text);
-            font-size: 1.05rem;
-            outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 0;
-            box-shadow: 0 4px 20px var(--shadow);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            font-size: 1.5rem; /* Increased font size */
+            outline: none !important;
+            line-height: 1.5;
+            resize: none;
+            min-height: 24px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: inherit;
+            transition: height 0.2s ease;
         }
 
         #query::placeholder {
@@ -201,38 +230,126 @@
             opacity: 0.7;
         }
 
-        #askButton {
-            padding: 0 25px;
-            border-radius: 16px;
-            background: var(--gradient);
-            color: rgb(36, 165, 230);
+        #query:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        #query:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        #query::-moz-focus-inner {
+            border: 0 !important;
+            outline: none !important;
+        }
+
+        /* Remove all focus styles */
+        *:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        *:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .query-type-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 8px 0 0 0;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        .query-type-btn {
+            padding: 8px;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text);
             border: none;
-            font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 1.4rem; /* Increased button icon size */
+            width: 45px; /* Increased button size */
+            height: 45px; /* Increased button size */
         }
-        
+
+        .query-type-btn:hover {
+            background: var(--card-bg);
+            transform: translateY(-1px);
+        }
+
+        .query-type-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        #askButton {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0;
+            width: 55px; /* Increased button size */
+            height: 55px; /* Increased button size */
+            border-radius: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-weight: 500;
+            font-size: 1.6rem; /* Increased icon size */
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(58, 125, 255, 0.2);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #askButton.visible {
+            display: flex;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         #askButton:hover {
-    transform: translateY(-3px) scale(1.05);
-    border: 1px solid var(--primary); /* Red border on hover */
-    box-shadow: 0 8px 24px rgba(255, 42, 77, 0.3); /* Red glow */
-    color: var(--primary); /* Optional: red text on hover */
-}
+            background: var(--accent-dark);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 4px 12px rgba(58, 125, 255, 0.3);
+        }
 
         #askButton:active {
-            transform: translateY(0);
+            transform: translateY(-50%) scale(0.95);
+            box-shadow: 0 2px 4px rgba(58, 125, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            #query {
+                padding: 10px 60px 10px 14px;
+                font-size: 1.4rem; /* Slightly smaller on mobile but still larger than before */
+            }
+
+            #askButton {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+                right: 10px;
+            }
         }
 
         #askButton i {
-            margin-right: 10px;
+            font-size: 1.4rem; /* Increased icon size */
         }
 
         #response-container {
@@ -258,7 +375,7 @@
             height: 100%;
             overflow-y: auto;
     line-height: 1.8;
-    font-size: 1.1rem;
+    font-size: 1.3rem; /* Increased response text size */
     white-space: pre-wrap;
     font-family: inherit;
     letter-spacing: 0.2px;
@@ -395,7 +512,7 @@
                 font-size: 0.85rem;
             }
         }
-
+        
         .error {
             color: #ff7675;
             animation: shake 0.6s ease;
@@ -2221,6 +2338,149 @@
     overflow-y: auto;
 } */
 
+        /* Add styles for query type buttons */
+        .query-type-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+            flex-wrap: wrap;
+            max-width: 800px;
+        }
+
+        .query-type-btn {
+            padding: 12px;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            width: 45px;
+            height: 45px;
+        }
+
+        .query-type-btn i {
+            font-size: 1.2rem;
+        }
+
+        .query-type-btn:hover {
+            background: var(--card-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .query-type-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .query-type-buttons {
+                gap: 8px;
+            }
+            
+            .query-type-btn {
+                padding: 10px;
+                font-size: 1.1rem;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        .search-input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 5px;
+        }
+
+        .query-type-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 8px 0 0 0;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        .query-type-btn {
+            padding: 6px;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 32px;
+            height: 32px;
+        }
+
+        .query-type-btn i {
+            font-size: 1rem;
+        }
+
+        .query-type-btn:hover {
+            background: var(--card-bg);
+            transform: translateY(-1px);
+        }
+
+        .query-type-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        #query {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #query:focus {
+            outline: none;
+        }
+
+        #query::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .query-type-buttons {
+                gap: 6px;
+                padding: 6px 0 0 0;
+                margin-top: 6px;
+            }
+            
+            .query-type-btn {
+                padding: 5px;
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+            
+            #query {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+        }
     </style>
      <script>
         // Add this to your existing JavaScript
@@ -2292,11 +2552,10 @@
             <div class="welcome-features">
                 <h3>Quick Guide:</h3>
                 <ul>
-                    <li><strong>Global Search:</strong> Type normally, but it might take a little time</li>
-                    <li><strong>Latest News:</strong> Use the keyword <strong>news</strong></li>
-                    <li><strong>Math:</strong> Use keywords like <strong>solve</strong>, <strong>calculate</strong>, or <strong>compute</strong></li>
-                    <li><strong>Weather:</strong> Use the keyword <strong>weather</strong></li>
-                    <li><strong>Dictionary:</strong> Use <strong>define</strong> or <strong>meaning of</strong> (⚠️ Under development)</li>
+                    <li><strong>For Math:</strong> Click the <strong>Calculator</strong> button </li>
+                    <li><strong>For News:</strong> Click the <strong>Newspaper</strong> button </li>
+                    <li><strong>For Chat:</strong> Click the  <strong>Robot</strong> button for general questions and conversations</li>
+                    <li><strong>For Global Search:</strong> Type your query directly in the search box</li>
                 </ul>
             </div>
             <button class="welcome-close" id="welcomeClose">
@@ -2364,10 +2623,22 @@
         </div>
         
         <form id="searchForm" class="search-container">
-            <input type="text" id="query" placeholder="Ask me anything..." autocomplete="off">
+            <div class="search-input-group">
+                <textarea id="query" placeholder="Type your message here..." rows="1"></textarea>
+                <div class="query-type-buttons">
+                    <button type="button" class="query-type-btn" data-type="math">
+                        <i class="fas fa-calculator"></i>
+                    </button>
+                    <button type="button" class="query-type-btn" data-type="news">
+                        <i class="fas fa-newspaper"></i>
+                    </button>
+                    <button type="button" class="query-type-btn" data-type="gemini">
+                        <i class="fas fa-robot"></i>
+                    </button>
+                </div>
+            </div>
             <button type="button" id="askButton">
-                <i class="fas fa-search"></i>
-                <span>Ask</span>
+                <i class="fas fa-paper-plane"></i>
             </button>
         </form>
         
@@ -2630,7 +2901,10 @@ document.addEventListener('contextmenu', function(event) {
     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ query }),
+                    body: JSON.stringify({ 
+                        query,
+                        queryType: activeQueryType // Add query type to request
+                    }),
                     signal: controller.signal
                 });
                 
@@ -2939,9 +3213,127 @@ document.addEventListener('contextmenu', function(event) {
             }
         }
 
+        // Add query type button functionality
+        const queryTypeButtons = document.querySelectorAll('.query-type-btn');
+        let activeQueryType = null;
 
+        queryTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Toggle active state
+                queryTypeButtons.forEach(btn => btn.classList.remove('active'));
+                if (activeQueryType === button.dataset.type) {
+                    activeQueryType = null;
+                } else {
+                    button.classList.add('active');
+                    activeQueryType = button.dataset.type;
+                }
+            });
+        });
 
+        // Auto-resize textarea
+        function autoResize() {
+            queryInput.style.height = 'auto';
+            queryInput.style.height = queryInput.scrollHeight + 'px';
+        }
 
+        // Add event listeners for auto-resize
+        queryInput.addEventListener('input', autoResize);
+        queryInput.addEventListener('focus', autoResize);
+        
+        // Handle Enter key
+        queryInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                askQuery();
+            }
+        });
+
+        // Update the JavaScript for the ask button visibility
+        queryInput.addEventListener('input', function() {
+            const askButton = document.getElementById('askButton');
+            if (this.value.trim()) {
+                askButton.classList.add('visible');
+            } else {
+                askButton.classList.remove('visible');
+            }
+            autoResize();
+        });
+
+        // Update the askQuery function to clear the input
+        async function askQuery() {
+            isAutoScrolling = true;
+            const query = queryInput.value.trim();
+            
+            if (!query) {
+                responseDiv.innerHTML = `<p class="error">Please enter a question</p>`;
+                responseDiv.classList.add('show');
+                return;
+            }
+            
+            askButton.disabled = true;
+            askButton.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+            
+            showTypingIndicator();
+            
+            if (responseDiv) {
+                responseDiv.scrollTop = responseDiv.scrollHeight;
+            }
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+                const res = await fetch('http://127.0.0.1:5000/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        query,
+                        queryType: activeQueryType
+                    }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (!res.ok) {
+                    throw new Error(`Server error: ${res.status}`);
+                }
+                
+                const data = await res.json();
+                
+                if (data.error) {
+                    responseDiv.innerHTML = `<p class="error">Error: ${data.error}</p>`;
+                } else {
+                    responseDiv.innerHTML = '<p></p>';
+                    requestAnimationFrame(() => {
+                        animateResponse(data.response, responseDiv.querySelector('p'));
+                    });
+                    addToLocalHistory(query, data.response);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                let errorMessage = 'Connection error. Please try again.';
+                
+                if (error.name === 'AbortError') {
+                    errorMessage = 'Request is taking too long. Please try again.';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Cannot connect to server. Please check your internet connection.';
+                } else if (error.message.includes('Server error')) {
+                    errorMessage = 'Server is busy. Please try again in a few moments.';
+                }
+                
+                responseDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+            } finally {
+                responseDiv.classList.add('show');
+                askButton.disabled = false;
+                askButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                queryInput.value = ''; // Clear the input
+                askButton.classList.remove('visible'); // Hide the button
+                queryInput.focus();
+            }
+        }
     </script>
 </body>
 </html>
